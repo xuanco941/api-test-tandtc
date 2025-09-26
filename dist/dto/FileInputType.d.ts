@@ -1,0 +1,4 @@
+export type FileInputType = {
+    filePath: string;
+    name: string;
+};
