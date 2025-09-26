@@ -4,6 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { AppConfigType } from 'src/configuration';
 import { ResponseDto } from './dto/ResponseDto';
 import { PromptDto } from './dto/PromptDto';
+import * as fs from "fs";
+import path from 'path';
+import { FileInputType } from './dto/FileInputType';
 
 @Injectable()
 export class AppService {
@@ -88,7 +91,72 @@ export class AppService {
 
     }
   }
+  async PromptWithFile(prompt: PromptDto, files: FileInputType[]): Promise<ResponseDto<string>> {
+    try {
+      const content: any = [prompt.contents];
 
+      for (const item of files) {
+        let file1 = await this.UploadRemotePDF(item.filePath, item.name)
+        if (file1) {
+          if (file1.uri && file1.mimeType) {
+            const fileContent = createPartFromUri(file1.uri, file1.mimeType);
+            content.push(fileContent);
+          }
+        }
+      }
+
+      // let file2 = await this.UploadRemotePDF(path.join(__dirname, "assets", "luat-to-chuc-toa-an.pdf"), "luat-to-chuc-toa-an")
+      // if (file2) {
+      //   if (file2.uri && file2.mimeType) {
+      //     const fileContent = createPartFromUri(file2.uri, file2.mimeType);
+      //     content.push(fileContent);
+      //   }
+      // }
+      // let file4 = await this.UploadRemotePDF(path.join(__dirname, "assets", "toa-an-sua-doi-2025.pdf"), "toa-an-sua-doi-2025")
+      // if (file4) {
+      //   if (file4.uri && file4.mimeType) {
+      //     const fileContent = createPartFromUri(file4.uri, file4.mimeType);
+      //     content.push(fileContent);
+      //   }
+      // }
+      // let file3 = await this.UploadRemotePDF(path.join(__dirname, "assets", "luat-can-bo-2025.pdf"), "luat-can-bo-2025")
+      // if (file3) {
+      //   if (file3.uri && file3.mimeType) {
+      //     const fileContent = createPartFromUri(file3.uri, file3.mimeType);
+      //     content.push(fileContent);
+      //   }
+      // }
+
+
+      const response = await this.ai.models.generateContent({
+        model: prompt.modelName,
+        contents: content,
+      });
+
+      console.log(response.text);
+      return {
+        statusCode: 200,
+        message: prompt.contents,
+        data: response.text ?? "Data is undefined"
+      }
+    }
+    catch (e) {
+      console.log(e)
+      if (e instanceof ApiError) {
+        return {
+          statusCode: e.status,
+          message: e.name,
+          data: e.message
+        }
+      }
+      return {
+        statusCode: 500,
+        message: "Lỗi hệ thống",
+        data: "Lỗi hệ thống"
+      }
+
+    }
+  }
 
 
 
@@ -181,5 +249,38 @@ export class AppService {
   async IsCachesExist(cacheName: string) {
     const cache = await this.ai.caches.get({ name: cacheName });
     return cache ? true : false;
+  }
+  async UploadRemotePDF(filePath, displayName) {
+    const pdfBuffer = fs.readFileSync(filePath); // Buffer nhị phân
+
+    const fileBlob = new Blob([pdfBuffer], { type: "application/pdf" });
+
+    const file = await this.ai.files.upload({
+      file: fileBlob,
+      config: {
+        displayName: displayName,
+      },
+    });
+
+    if (!file.name) {
+      return null
+    }
+
+    // Wait for the file to be processed.
+    let getFile = await this.ai.files.get({ name: file.name });
+    while (getFile.state === 'PROCESSING') {
+      getFile = await this.ai.files.get({ name: file.name });
+      console.log(`current file status: ${getFile.state}`);
+      console.log('File is still processing, retrying in 5 seconds');
+
+      await new Promise((resolve) => {
+        setTimeout(resolve, 5000);
+      });
+    }
+    if (file.state === 'FAILED') {
+      throw new Error('File processing failed.');
+    }
+
+    return file;
   }
 }

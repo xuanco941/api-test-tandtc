@@ -3,10 +3,14 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { AppConfigType } from './configuration';
+import * as express from 'express';
+import { join } from 'path';
 
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use('/assets', express.static(join(__dirname, '..', 'assets')));
 
   // Prefix API
   app.setGlobalPrefix('api');
