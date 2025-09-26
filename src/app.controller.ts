@@ -19,7 +19,7 @@ export class AppController {
     }
 
     if (promptDto.search === true) {
-      promptDto.contents = "Dựa vào thông tin tìm kiếm từ thuvienphapluat.vn hoặc chinhphu.vn hãy lấy thông tin từ 2 trang này và trả lời cho tôi: " + promptDto.contents;
+      promptDto.contents = "[Pháp luật Việt Nam] Dựa vào thông tin từ thuvienphapluat.vn và chinhphu.vn trả lời câu hỏi: " + promptDto.contents;
       return await this.appService.PromptWithSearch(promptDto);
     }
     return await this.appService.Prompt(promptDto);
