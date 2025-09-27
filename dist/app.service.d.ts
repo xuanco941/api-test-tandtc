@@ -10,6 +10,7 @@ export declare class AppService {
     Prompt(prompt: PromptDto): Promise<ResponseDto<string>>;
     PromptWithSearch(prompt: PromptDto): Promise<ResponseDto<string>>;
     PromptWithFile(prompt: PromptDto, files: FileInputType[]): Promise<ResponseDto<string>>;
+    PromptWithImage(prompt: PromptDto): Promise<ResponseDto<string>>;
     PromptWithCache(prompt: PromptDto, cacheName: string): Promise<ResponseDto<string>>;
     CreateFileCache(pdfPath: string, modelName: string, cacheName: string, mimeType?: string, systemInstruction?: string, ttl?: number): Promise<any>;
     DeleteCache(cacheName: string): Promise<void>;

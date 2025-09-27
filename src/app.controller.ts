@@ -1,10 +1,12 @@
 
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { PromptDto } from './dto/PromptDto';
 import { AppService } from './app.service';
 import { FileInputType } from './dto/FileInputType';
 import path from 'path';
+import type { Request, Response } from 'express'; // Or from '@nestjs/platform-fastify' if using Fastify
+
 
 @Controller()
 export class AppController {
@@ -24,8 +26,12 @@ export class AppController {
       { filePath: path.join(__dirname, "assets", "toa-an-sua-doi-2025.pdf"), name: "luat-to-chuc-toa-an-sua-doi-2025" }
     ]
 
+    if (!promptDto.contents) {
+      promptDto.contents = "Xin chào";
+    }
+
     if (!promptDto.modelName) {
-      promptDto.modelName = "gemini-2.5-flash"
+      promptDto.modelName = "gemini-2.5-flash";
     }
 
     let result: {};
@@ -46,11 +52,32 @@ export class AppController {
     else if (promptDto.type === 5) {
       result = await this.appService.PromptWithFile(promptDto, files);
     }
-    result = await this.appService.Prompt(promptDto);
+    else if (promptDto.type === 6 || promptDto.image) {
+      promptDto.image = promptDto.image.replace(/^data:image\/\w+;base64,/, '');
+      result = await this.appService.PromptWithImage(promptDto);
+    }
+    else {
+      result = await this.appService.Prompt(promptDto);
+    }
 
-    return { ...result, note: "0: default, 1: search, 2: hiến pháp, 3: luật cán bộ, 4: tcta, 5: 4files" }
+    return result;
 
   }
+
+  @Get("/")
+  Info(@Req() req: Request) {
+    const protocol = (req.headers['x-forwarded-proto'] as string) || req.protocol;
+    const host = (req.headers['x-forwarded-host'] as string) || req.get('host');
+    const domain = `${protocol}://${host}`;
+
+    const info = {
+      promptImage: `async function pasteImage(){try{const items=await navigator.clipboard.read();for(const item of items){if(item.types.includes("image/png")){const blob=await item.getType("image/png");const reader=new FileReader();reader.onloadend=()=>{const base64=reader.result;fetch("${domain}/post",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:"Bạn đang làm câu hỏi trắc nghiệm từ ảnh, hãy chọn đáp án đúng và trả lời ngắn gọn:",image:base64})}).then((res)=>res.json()).then(data=>{console.log(data);alert(data.data)})};reader.readAsDataURL(blob)}}}catch(err){console.error("Clipboard error:",err)}}document.addEventListener('keydown',(e)=>{if(e.key.toLowerCase()==='p'||e.key.toLocaleLowerCase()==='y'){console.log(e.key);pasteImage()}});`,
+      promptDefault: `fetch("${domain}/post",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:"",type:0})}).then((res)=>res.json()).then(data=>{console.log(data)});`,
+      type: `1:search, 2:hiến pháp, 3:luật cán bộ, 4:tòa án, 5:all files, 6:image`
+    }
+    return info;
+  }
+
 
   // @Get('/loadCache')
   // async LoadCache() {

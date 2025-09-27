@@ -157,7 +157,43 @@ export class AppService {
 
     }
   }
+  async PromptWithImage(prompt: PromptDto): Promise<ResponseDto<string>> {
+    try {
+      const response = await this.ai.models.generateContent({
+        model: prompt.modelName,
+        contents: [
+          {
+            inlineData: {
+              mimeType: 'image/png',
+              data: prompt.image,
+            },
+          },
+          { text: prompt.contents }
+        ],
+      });
+      console.log(response.text);
+      return {
+        statusCode: 200,
+        message: "success",
+        data: response.text ?? "Data is undefined"
+      }
+    }
+    catch (e) {
+      if (e instanceof ApiError) {
+        return {
+          statusCode: e.status,
+          message: e.name,
+          data: e.message
+        }
+      }
+      return {
+        statusCode: 500,
+        message: "Lỗi hệ thống",
+        data: "Lỗi hệ thống"
+      }
 
+    }
+  }
 
 
 

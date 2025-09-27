@@ -13,6 +13,7 @@ exports.PromptDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 class PromptDto {
     contents;
+    image;
     modelName;
     type;
 }
@@ -21,6 +22,10 @@ __decorate([
     (0, swagger_1.ApiProperty)({ required: true, default: "Điều 94 trong hiến pháp năm 2013 quy định điều gì?" }),
     __metadata("design:type", String)
 ], PromptDto.prototype, "contents", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, default: "", description: "base64 - image/png" }),
+    __metadata("design:type", String)
+], PromptDto.prototype, "image", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false, default: "gemini-2.5-flash" }),
     __metadata("design:type", String)
