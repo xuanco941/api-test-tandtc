@@ -60,7 +60,7 @@ let AppController = class AppController {
 };
 exports.AppController = AppController;
 __decorate([
-    (0, common_1.Post)('/'),
+    (0, common_1.Post)('/post'),
     (0, swagger_1.ApiOperation)({ summary: 'Đặt câu lệnh muốn hỏi' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Trả về câu trả lời' }),
     __param(0, (0, common_1.Body)()),

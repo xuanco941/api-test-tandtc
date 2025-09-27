@@ -42,7 +42,6 @@ const path_1 = require("path");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.use('/assets', express.static((0, path_1.join)(__dirname, '..', 'assets')));
-    app.setGlobalPrefix('api');
     const config = new swagger_1.DocumentBuilder()
         .setTitle('My API')
         .setDescription('API docs for my NestJS project')

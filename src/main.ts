@@ -13,7 +13,7 @@ async function bootstrap() {
   app.use('/assets', express.static(join(__dirname, '..', 'assets')));
 
   // Prefix API
-  app.setGlobalPrefix('api');
+  // app.setGlobalPrefix('api');
 
   // Cấu hình Swagger
   const config = new DocumentBuilder()

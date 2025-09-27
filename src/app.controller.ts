@@ -11,7 +11,7 @@ export class AppController {
 
   constructor(private readonly appService: AppService) { }
 
-  @Post('/')
+  @Post('/post')
   @ApiOperation({ summary: 'Đặt câu lệnh muốn hỏi' })
   @ApiResponse({ status: 200, description: 'Trả về câu trả lời' })
   async Prompt(@Body() promptDto: PromptDto) {
