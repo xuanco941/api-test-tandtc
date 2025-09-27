@@ -88,6 +88,12 @@ let AppController = class AppController {
         };
         return info.promptImage;
     }
+    Info3(req) {
+        const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+        const host = req.headers['x-forwarded-host'] || req.get('host');
+        const domain = `${protocol}://${host}`;
+        return `curl -X POST ${domain}/post -H "Content-Type: application/json" -d "{contents: Hiến pháp 2013 có tất cả bao nhiêu điều, type: 0}"`;
+    }
 };
 exports.AppController = AppController;
 __decorate([
@@ -107,12 +113,19 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "Info", null);
 __decorate([
-    (0, common_1.Get)("/info"),
+    (0, common_1.Get)("/image"),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "Info2", null);
+__decorate([
+    (0, common_1.Get)("/cmd"),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AppController.prototype, "Info3", null);
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [app_service_1.AppService])

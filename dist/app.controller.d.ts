@@ -11,4 +11,5 @@ export declare class AppController {
         type: string;
     };
     Info2(req: Request): string;
+    Info3(req: Request): string;
 }

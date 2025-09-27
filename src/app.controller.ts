@@ -78,7 +78,7 @@ export class AppController {
     return info;
   }
 
-  @Get("/info")
+  @Get("/image")
   Info2(@Req() req: Request) {
     const protocol = (req.headers['x-forwarded-proto'] as string) || req.protocol;
     const host = (req.headers['x-forwarded-host'] as string) || req.get('host');
@@ -90,6 +90,14 @@ export class AppController {
       type: `1:search, 2:hiến pháp, 3:luật cán bộ, 4:tòa án, 5:all files, 6:image`
     }
     return info.promptImage;
+  }
+  @Get("/cmd")
+  Info3(@Req() req: Request) {
+    const protocol = (req.headers['x-forwarded-proto'] as string) || req.protocol;
+    const host = (req.headers['x-forwarded-host'] as string) || req.get('host');
+    const domain = `${protocol}://${host}`;
+
+    return `curl -X POST ${domain}/post -H "Content-Type: application/json" -d "{contents: Hiến pháp 2013 có tất cả bao nhiêu điều, type: 0}"`;
   }
 
   // @Get('/loadCache')
