@@ -11,6 +11,9 @@ async function bootstrap() {
         prefix: '/assets/',
     });
     app.set('trust proxy', 1);
+    app.enableCors({
+        origin: '*',
+    });
     const config = new swagger_1.DocumentBuilder()
         .setTitle('My API')
         .setDescription('API docs for my NestJS project')
