@@ -10,4 +10,5 @@ export declare class AppController {
         promptDefault: string;
         type: string;
     };
+    Info2(req: Request): string;
 }
