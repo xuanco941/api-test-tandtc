@@ -14,6 +14,8 @@ async function bootstrap() {
     prefix: '/assets/',   // URL prefix (quan trọng)
   });
   app.set('trust proxy', 1);
+  app.enableCors(); // Enables CORS for all origins by default
+
 
   // Prefix API
   // app.setGlobalPrefix('api');
