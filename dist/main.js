@@ -13,6 +13,8 @@ async function bootstrap() {
     app.set('trust proxy', 1);
     app.enableCors({
         origin: '*',
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        credentials: false,
     });
     const config = new swagger_1.DocumentBuilder()
         .setTitle('My API')

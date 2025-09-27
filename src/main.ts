@@ -14,9 +14,13 @@ async function bootstrap() {
     prefix: '/assets/',   // URL prefix (quan trọng)
   });
   app.set('trust proxy', 1);
+
+  // ✅ Bật CORS cho tất cả domain
   app.enableCors({
-    origin: '*',
-  }); // Enables CORS for all origins by default
+    origin: '*',  
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: false,
+  });
 
 
   // Prefix API
