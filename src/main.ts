@@ -5,10 +5,15 @@ import { ConfigService } from '@nestjs/config';
 import { AppConfigType } from './configuration';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as bodyParser from 'body-parser';
 
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // Tăng giới hạn lên 50MB (hoặc cao hơn nếu cần)
+  app.use(bodyParser.json({ limit: '50mb' }));
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
   app.useStaticAssets(join(__dirname, '..', 'src', 'assets'), {
     prefix: '/assets/',   // URL prefix (quan trọng)
@@ -17,7 +22,7 @@ async function bootstrap() {
 
   // ✅ Bật CORS cho tất cả domain
   app.enableCors({
-    origin: '*',  
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: false,
   });
