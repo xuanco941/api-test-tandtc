@@ -34,8 +34,8 @@ let AppController = class AppController {
             { filePath: path_1.default.join(__dirname, "assets", "luat-to-chuc-toa-an.pdf"), name: "luat-to-chuc-toa-an-2024" },
             { filePath: path_1.default.join(__dirname, "assets", "toa-an-sua-doi-2025.pdf"), name: "luat-to-chuc-toa-an-sua-doi-2025" }
         ];
-        if (!promptDto.contents) {
-            promptDto.contents = "Xin chào";
+        if (!promptDto.contents && promptDto.content) {
+            promptDto.contents = promptDto.content ?? "Xin chào";
         }
         if (!promptDto.modelName) {
             promptDto.modelName = "gemini-2.5-flash";
@@ -73,7 +73,8 @@ let AppController = class AppController {
         const info = {
             promptImage: `async function pasteImage(){try{const items=await navigator.clipboard.read();for(const item of items){if(item.types.includes("image/png")){const blob=await item.getType("image/png");const reader=new FileReader();reader.onloadend=()=>{const base64=reader.result;fetch("${domain}/post",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:"Bạn đang làm câu hỏi trắc nghiệm từ ảnh, hãy chọn đáp án đúng và trả lời ngắn gọn:",image:base64})}).then((res)=>res.json()).then(data=>{console.log(data);alert(data.data)})};reader.readAsDataURL(blob)}}}catch(err){console.error("Clipboard error:",err)}}document.addEventListener('keydown',(e)=>{if(e.key.toLowerCase()==='p'||e.key.toLocaleLowerCase()==='y'){console.log(e.key);pasteImage()}});`,
             promptDefault: `fetch("${domain}/post",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:"",type:0})}).then((res)=>res.json()).then(data=>{console.log(data)});`,
-            type: `1:search, 2:hiến pháp, 3:luật cán bộ, 4:tòa án, 5:all files, 6:image`
+            type: `1:search, 2:hiến pháp, 3:luật cán bộ, 4:tòa án, 5:all files, 6:image`,
+            cmd: `curl -X POST "https://api-ta-six.vercel.app/post" -d "{\"content\":\"hello\"}"`
         };
         return info;
     }

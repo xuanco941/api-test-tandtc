@@ -54,3 +54,6 @@
 
 
 // fetch('http://localhost:3994').then(res => res.json()).then(data => console.log(data.promptImage))
+
+
+// curl -X POST "https://api-ta-six.vercel.app/post" -d "{\"content\":\"hello\"}"

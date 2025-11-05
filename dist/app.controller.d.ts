@@ -9,6 +9,7 @@ export declare class AppController {
         promptImage: string;
         promptDefault: string;
         type: string;
+        cmd: string;
     };
     Info2(req: Request): string;
     Info3(req: Request): string;

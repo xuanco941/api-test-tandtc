@@ -3,4 +3,5 @@ export declare class PromptDto {
     image: string;
     modelName: string;
     type?: number;
+    content?: string;
 }

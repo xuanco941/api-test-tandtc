@@ -16,6 +16,7 @@ class PromptDto {
     image;
     modelName;
     type;
+    content;
 }
 exports.PromptDto = PromptDto;
 __decorate([

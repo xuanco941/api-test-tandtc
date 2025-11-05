@@ -9,4 +9,5 @@ export class PromptDto {
     modelName: string;
     @ApiProperty({ required: false, default: 0, description: "0: default, 1: search, 2: hiến pháp, 3: luật cán bộ, 4: tcta, 5: 4files" })
     type?: number;
+    content?: string;
 }
