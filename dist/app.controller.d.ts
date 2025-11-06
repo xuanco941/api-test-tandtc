@@ -6,10 +6,11 @@ export declare class AppController {
     constructor(appService: AppService);
     Prompt(promptDto: PromptDto): Promise<{}>;
     Info(req: Request): {
-        promptImage: string;
+        promptImage2: string;
         promptDefault: string;
         type: string;
         cmd: string;
+        promptImage: string;
     };
     Info2(req: Request): string;
     Info3(req: Request): string;
