@@ -6,7 +6,6 @@ export declare class AppController {
     constructor(appService: AppService);
     Prompt(promptDto: PromptDto): Promise<{}>;
     Info(req: Request): {
-        promptImage2: string;
         promptDefault: string;
         type: string;
         cmd: string;
