@@ -34,8 +34,8 @@ let AppController = class AppController {
             { filePath: path_1.default.join(__dirname, "assets", "luat-to-chuc-toa-an.pdf"), name: "luat-to-chuc-toa-an-2024" },
             { filePath: path_1.default.join(__dirname, "assets", "toa-an-sua-doi-2025.pdf"), name: "luat-to-chuc-toa-an-sua-doi-2025" }
         ];
-        if (!promptDto.contents && !promptDto.content && promptDto.image) {
-            promptDto.contents = `Bạn đang làm câu hỏi trắc nghiệm, hãy chọn đáp án đúng và trả lời là A,B,C hoặc D. Không cần giải thích chi tiết`;
+        if (promptDto.image) {
+            promptDto.contents = `Bạn đang làm câu hỏi trắc nghiệm, hãy chọn đáp án đúng và trả lời là A,B,C hoặc D. Không giải thích chi tiết: `;
         }
         if (!promptDto.modelName) {
             promptDto.modelName = "gemini-2.5-flash";
