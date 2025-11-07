@@ -34,8 +34,8 @@ let AppController = class AppController {
             { filePath: path_1.default.join(__dirname, "assets", "luat-to-chuc-toa-an.pdf"), name: "luat-to-chuc-toa-an-2024" },
             { filePath: path_1.default.join(__dirname, "assets", "toa-an-sua-doi-2025.pdf"), name: "luat-to-chuc-toa-an-sua-doi-2025" }
         ];
-        if (!promptDto.contents && promptDto.content) {
-            promptDto.contents = promptDto.content ?? "Xin chào";
+        if (!promptDto.contents && !promptDto.content && promptDto.image) {
+            promptDto.contents = `Bạn đang làm câu hỏi trắc nghiệm, hãy chọn đáp án đúng và trả lời là A,B,C hoặc D. Không cần giải thích chi tiết`;
         }
         if (!promptDto.modelName) {
             promptDto.modelName = "gemini-2.5-flash";
@@ -74,9 +74,9 @@ let AppController = class AppController {
             promptDefault: `fetch("${domain}/post",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:"",type:0})}).then((res)=>res.json()).then(data=>{console.log(data)});`,
             type: `1:search, 2:hiến pháp, 3:luật cán bộ, 4:tòa án, 5:all files, 6:image`,
             cmd: `curl -X POST "https://api-ta-six.vercel.app/post" -d "{\"content\":\"hello\"}"`,
-            promptImage: `async function pasteImage(){try{const items=await navigator.clipboard.read();for(const item of items){if(item.types.includes("image/png")){const blob=await item.getType("image/png");const reader=new FileReader();reader.onloadend=()=>{const base64=reader.result;fetch("${domain}/post",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:"Bạn đang làm câu hỏi trắc nghiệm, hãy chọn đáp án đúng và trả lời là A,B,C hoặc D. Không cần giải thích chi tiết:",image:base64})}).then((res)=>res.json()).then(data=>{const p = document.createElement("div");p.innerText=data.data;p.style.position = "fixed";p.style.top = "20px";p.style.left = "20px";p.style.color = "#858080ff";p.style.maxWidth = "40px";p.style.maxHeight = "40px";p.style.overflow = "hidden";p.style.whiteSpace = "nowrap";p.style.textOverflow = "ellipsis";document.body.appendChild(p);setTimeout(() => p.remove(), 5000);})};reader.readAsDataURL(blob)}}}catch(err){console.error("Clipboard error:",err)}}document.addEventListener('keydown',(e)=>{if(e.key.toLowerCase()==='z'){console.log(e.key);pasteImage()}});`,
+            promptImage: `async function pasteImage(){try{const items=await navigator.clipboard.read();for(const item of items){if(item.types.includes("image/png")){const blob=await item.getType("image/png");const reader=new FileReader();reader.onloadend=()=>{const base64=reader.result;fetch("${domain}/post",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({image:base64})}).then((res)=>res.json()).then(data=>{const p = document.createElement("div");p.innerText=data.data;p.style.position = "fixed";p.style.top = "20px";p.style.left = "20px";p.style.color = "#858080ff";p.style.maxWidth = "40px";p.style.maxHeight = "40px";p.style.overflow = "hidden";p.style.whiteSpace = "nowrap";p.style.textOverflow = "ellipsis";document.body.appendChild(p);setTimeout(() => p.remove(), 5000);})};reader.readAsDataURL(blob)}}}catch(err){console.error("Clipboard error:",err)}}document.addEventListener('keydown',(e)=>{if(e.key.toLowerCase()==='z'){console.log(e.key);pasteImage()}});`,
         };
-        return info;
+        return info.promptImage;
     }
     Info2(req) {
         const protocol = req.headers['x-forwarded-proto'] || req.protocol;
@@ -86,9 +86,9 @@ let AppController = class AppController {
             promptDefault: `fetch("${domain}/post",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:"",type:0})}).then((res)=>res.json()).then(data=>{console.log(data)});`,
             type: `1:search, 2:hiến pháp, 3:luật cán bộ, 4:tòa án, 5:all files, 6:image`,
             cmd: `curl -X POST "https://api-ta-six.vercel.app/post" -d "{\"content\":\"hello\"}"`,
-            promptImage: `async function pasteImage(){try{const items=await navigator.clipboard.read();for(const item of items){if(item.types.includes("image/png")){const blob=await item.getType("image/png");const reader=new FileReader();reader.onloadend=()=>{const base64=reader.result;fetch("${domain}/post",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:"Bạn đang làm câu hỏi trắc nghiệm, hãy chọn đáp án đúng và trả lời là A,B,C hoặc D. Không cần giải thích chi tiết:",image:base64})}).then((res)=>res.json()).then(data=>{const p = document.createElement("div");p.innerText=data.data;p.style.position = "fixed";p.style.top = "20px";p.style.left = "20px";p.style.color = "#858080ff";p.style.maxWidth = "40px";p.style.maxHeight = "40px";p.style.overflow = "hidden";p.style.whiteSpace = "nowrap";p.style.textOverflow = "ellipsis";document.body.appendChild(p);setTimeout(() => p.remove(), 5000);})};reader.readAsDataURL(blob)}}}catch(err){console.error("Clipboard error:",err)}}document.addEventListener('keydown',(e)=>{if(e.key.toLowerCase()==='z'){console.log(e.key);pasteImage()}});`,
+            promptImage: `async function pasteImage(){try{const items=await navigator.clipboard.read();for(const item of items){if(item.types.includes("image/png")){const blob=await item.getType("image/png");const reader=new FileReader();reader.onloadend=()=>{const base64=reader.result;fetch("${domain}/post",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({image:base64})}).then((res)=>res.json()).then(data=>{const p = document.createElement("div");p.innerText=data.data;p.style.position = "fixed";p.style.top = "20px";p.style.left = "20px";p.style.color = "#858080ff";p.style.maxWidth = "40px";p.style.maxHeight = "40px";p.style.overflow = "hidden";p.style.whiteSpace = "nowrap";p.style.textOverflow = "ellipsis";document.body.appendChild(p);setTimeout(() => p.remove(), 5000);})};reader.readAsDataURL(blob)}}}catch(err){console.error("Clipboard error:",err)}}document.addEventListener('keydown',(e)=>{if(e.key.toLowerCase()==='z'){console.log(e.key);pasteImage()}});`,
         };
-        return info.promptImage;
+        return info;
     }
     Info3(req) {
         const protocol = req.headers['x-forwarded-proto'] || req.protocol;
@@ -115,7 +115,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "Info", null);
 __decorate([
-    (0, common_1.Get)("/image"),
+    (0, common_1.Get)("/info"),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
